@@ -234,9 +234,10 @@ export default function Deck() {
               <div className="outcome">
                 <div className="num">02</div>
                 <div>
-                  <div className="o-title">Entender el sistema de diseño</div>
+                  <div className="o-title">Mentalidad para generar valor</div>
                   <div className="o-desc">
-                    Colores, tipografía, tokens: cómo se vuelve código.
+                    Enfocarte en el problema y el impacto, no en cada línea de
+                    código.
                   </div>
                 </div>
               </div>
@@ -384,27 +385,86 @@ export default function Deck() {
             <h2 className="close-headline">Empezamos</h2>
             <p className="close-sub">Vamos a diseñar y desplegar juntos</p>
             <hr className="accent-line close-rule" />
-            <div className="prereqs">
-              <div className="prereq-col">
-                <h3>Necesitas</h3>
-                <ul role="list">
-                  <li>Cuenta en claude.ai (plan Pro)</li>
-                  <li>Navegador moderno</li>
-                  <li>Ganas de iterar</li>
-                </ul>
+
+            {/* ROCKET LAUNCH — git push → producción. All motion is scoped under
+                #s4.active in CSS so it re-fires every time the slide is shown. */}
+            <div className="ship" aria-hidden="true">
+              <div className="ship-stage">
+                {/* rising vapor / exhaust trail behind the rocket */}
+                <span className="trail" />
+
+                {/* rig that launches + hover-bobs as one unit */}
+                <div className="launch-rig">
+                  <svg
+                    className="rocket"
+                    viewBox="0 0 120 200"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                  >
+                    <path
+                      className="r-stroke"
+                      d="M60 8c16 18 24 42 24 70 0 18-3 33-8 45H44c-5-12-8-27-8-45 0-28 8-52 24-70Z"
+                      strokeWidth="3"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      className="r-stroke r-soft"
+                      d="M48 44c3-12 7-23 12-31 5 8 9 19 12 31"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <circle className="r-stroke r-port" cx="60" cy="74" r="13" strokeWidth="3" />
+                    <circle className="r-port-dot" cx="60" cy="74" r="4.5" />
+                    <path
+                      className="r-stroke r-fill"
+                      d="M36 116c-12 5-20 16-22 30 9-2 17-3 24-3"
+                      strokeWidth="3"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      className="r-stroke r-fill"
+                      d="M84 116c12 5 20 16 22 30-9-2-17-3-24-3"
+                      strokeWidth="3"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      className="r-stroke r-fill"
+                      d="M48 150h24l-5 16H53l-5-16Z"
+                      strokeWidth="3"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+
+                  {/* exhaust flame — the one restrained warm tint in the deck */}
+                  <span className="flame">
+                    <span className="flame-outer" />
+                    <span className="flame-core" />
+                  </span>
+
+                  {/* spark particles trickling up from the nozzle */}
+                  <span className="spark spark-1" />
+                  <span className="spark spark-2" />
+                  <span className="spark spark-3" />
+                </div>
+
+                {/* launch-pad glow + one-shot deploy confirmation ring */}
+                <span className="pad-glow" />
+                <span className="deploy-ring" />
               </div>
-              <div className="prereq-col">
-                <h3>Opcional pero útil</h3>
-                <ul role="list">
-                  <li>Node.js 18+ instalado</li>
-                  <li>Claude Code CLI instalado</li>
-                  <li>Cuenta en Vercel (plan Hobby)</li>
-                </ul>
+
+              {/* faux terminal caption reinforcing the shipping idea */}
+              <div className="ship-term" role="presentation">
+                <span className="t-line t-push">$ git push origin main</span>
+                <span className="t-line t-deploy">
+                  desplegando<span className="t-dots">…</span>
+                </span>
+                <span className="t-line t-live">
+                  <span className="t-check">✓</span> en producción
+                  <span className="t-caret" />
+                </span>
               </div>
             </div>
-            <div className="close-credit">
-              Andrés Rodríguez · andresrodriguez.tech
-            </div>
+
             {/* eslint-disable-next-line @next/next/no-img-element -- brand logo in slide footer */}
             <img className="slide-indicator" src="/iacademy-logo.png" alt="iAcademy" />
           </section>

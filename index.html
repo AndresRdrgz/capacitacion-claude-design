@@ -34,11 +34,15 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   ::selection{background:var(--selection);}
 
-  html,body{
+  html,html, body{
     height:100%;
+    margin:0;
+    padding:0;
     background:var(--bg);
     overflow:hidden;
     font-family:var(--font-sans);
+    overscroll-behavior:none;
+    -webkit-text-size-adjust:100%;
   }
 
   /* viewport centers the scaled canvas */
@@ -106,6 +110,7 @@
     position:absolute;
     top:50%;
     left:120px;
+    right:120px;
     transform:translateY(-50%);
     z-index:2;
   }
@@ -116,6 +121,9 @@
     color:var(--text-headline);
     letter-spacing:-0.03em;
     line-height:0.95;
+    overflow-wrap:break-word;
+    word-break:normal;
+    max-width:1700px;
   }
   #s1 .cover-sub{
     font-family:var(--font-serif);
@@ -555,14 +563,24 @@
   function next(){ if (current < TOTAL - 1) go(current + 1); }
   function prev(){ if (current > 0) go(current - 1); }
 
-  // scaling: fit 1920x1080 canvas into viewport
+  // scaling: fit 1920x1080 canvas into viewport.
+  // iOS Safari fires visualViewport.resize but NOT window.resize when the
+  // URL bar collapses/expands, so we listen to both.
   function scale(){
-    var sw = window.innerWidth / 1920;
-    var sh = window.innerHeight / 1080;
-    var s = Math.min(sw, sh);
+    var w = (window.visualViewport && window.visualViewport.width)  || window.innerWidth;
+    var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    var s = Math.min(w / 1920, h / 1080);
     canvas.style.transform = "scale(" + s + ")";
   }
   window.addEventListener("resize", scale);
+  if (window.visualViewport){
+    window.visualViewport.addEventListener("resize", scale);
+  }
+  // also re-scale after fonts load — Bricolage / Instrument Serif arriving
+  // changes the rendered metrics enough to cause text reflow
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(scale);
+  }
 
   // keyboard
   document.addEventListener("keydown", function(e){

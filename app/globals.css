@@ -308,9 +308,12 @@ html, body{
 }
 
 /* -------------------------------- hero rail -------------------------------- */
+/* Vertical center math: the badge is the node's first child, so its center sits
+   half the 112px badge (56px) below the top of .tl-track — top:56px lands the
+   rail dead-center on the badges. */
 #s3 .tl-rail{
   position:absolute;
-  top:94px;
+  top:56px;
   left:118px;
   right:118px;
   height:2px;
@@ -339,16 +342,6 @@ html, body{
   box-shadow:0 0 14px 2px rgba(246,243,237,0.45);
   border-radius:2px;
   opacity:0;
-}
-
-/* ----------------------------- step number (mono) -------------------------- */
-#s3 .tl-step{
-  font-family:var(--font-mono);
-  font-size:14px;
-  line-height:1;
-  letter-spacing:0.24em;
-  color:var(--text-muted);
-  margin-bottom:24px;
 }
 
 /* ------------------------------ circular badge ---------------------------- */

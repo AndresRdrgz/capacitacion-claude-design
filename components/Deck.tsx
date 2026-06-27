@@ -348,7 +348,7 @@ export default function Deck() {
               </div>
 
               <ol className="tl-track" role="list">
-                {TOOLS.map((t, i) => (
+                {TOOLS.map((t) => (
                   <li
                     key={t.key}
                     className="tl-node"
@@ -359,9 +359,6 @@ export default function Deck() {
                       } as CSSProperties
                     }
                   >
-                    <span className="tl-step">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <div className="tl-badge">
                       {/* logo painted via CSS mask on a non-img span, so the
                           single-path SVG hits its exact brand color */}

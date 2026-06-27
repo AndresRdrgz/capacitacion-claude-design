@@ -6,11 +6,23 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type CSSProperties,
   type MouseEvent,
 } from "react";
 
-const TOTAL = 4;
+const TOTAL = 5;
 const STORAGE_KEY = "claude-design-deck-slide";
+
+// Slide 3 — the real build→deploy stack, in flow order. Order is load-bearing:
+// the timeline CSS uses :nth-child for the stagger + brand-tint, so this array
+// order must match the visual sequence. `key` drives the per-logo size class.
+const TOOLS = [
+  { key: "claude", src: "/tool-claude.svg", brand: "#D97757", name: "Claude", role: "Diseña e idea" },
+  { key: "next", src: "/tool-nextdotjs.svg", brand: "#F6F3ED", name: "Next.js", role: "Construye la app" },
+  { key: "pg", src: "/tool-postgresql.svg", brand: "#4169E1", name: "PostgreSQL", role: "Conecta los datos" },
+  { key: "gh", src: "/tool-github.svg", brand: "#F6F3ED", name: "GitHub", role: "Versiona el código" },
+  { key: "vercel", src: "/tool-vercel.svg", brand: "#F6F3ED", name: "Vercel", role: "Despliega a producción" },
+];
 
 // useLayoutEffect warns during SSR/prerender; fall back to useEffect on the
 // server. The scale must run before paint on the client to avoid a flash of
@@ -201,7 +213,6 @@ export default function Deck() {
               <div className="name">Andrés Rodríguez · Capacitador</div>
               <div className="date">Junio 2026</div>
             </div>
-            <div className="ghost-number">01</div>
           </section>
 
           {/* SLIDE 2 — QUÉ ESPERAR */}
@@ -248,11 +259,13 @@ export default function Deck() {
                 </div>
               </div>
             </div>
-            <div className="slide-indicator">02 / 04</div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand logo in slide footer */}
+            <img className="slide-indicator" src="/iacademy-logo.png" alt="iAcademy" />
           </section>
 
-          {/* SLIDE 3 — AGENDA */}
-          <section className={slideClass(2)} id="s3" aria-label="Lo que veremos">
+          {/* SLIDE — LO QUE VEREMOS (agenda). id is s5 (added after the original
+              four); slideClass(2) is what places it third in navigation. */}
+          <section className={slideClass(2)} id="s5" aria-label="Lo que veremos">
             <header>
               <h2 className="slide-header">Lo que veremos</h2>
               <p className="slide-subheader">Seis bloques, un flujo</p>
@@ -309,11 +322,68 @@ export default function Deck() {
                 </div>
               </div>
             </div>
-            <div className="slide-indicator">03 / 04</div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand logo in slide footer */}
+            <img className="slide-indicator" src="/iacademy-logo.png" alt="iAcademy" />
+          </section>
+
+          {/* SLIDE 3 — TIMELINE: HERRAMIENTAS REALES (con la declaración puente) */}
+          <section
+            className={slideClass(3)}
+            id="s3"
+            aria-label="Herramientas reales"
+          >
+            <header>
+              <h2 className="slide-header">Herramientas reales</h2>
+              <p className="tl-stmt">
+                Los artefactos HTML son un <em>buen comienzo</em>, pero no están
+                pensados para crear aplicaciones <strong>seguras</strong> ni{" "}
+                <strong>escalables</strong>.
+              </p>
+            </header>
+
+            <div className="tl">
+              {/* dim base track + the bright beam that rides left→right */}
+              <div className="tl-rail" aria-hidden="true">
+                <span className="tl-beam" />
+              </div>
+
+              <ol className="tl-track" role="list">
+                {TOOLS.map((t, i) => (
+                  <li
+                    key={t.key}
+                    className="tl-node"
+                    style={
+                      {
+                        "--src": `url(${t.src})`,
+                        "--brand": t.brand,
+                      } as CSSProperties
+                    }
+                  >
+                    <span className="tl-step">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="tl-badge">
+                      {/* logo painted via CSS mask on a non-img span, so the
+                          single-path SVG hits its exact brand color */}
+                      <span
+                        className={`tl-logo tl-logo--${t.key}`}
+                        role="img"
+                        aria-label={t.name}
+                      />
+                    </div>
+                    <div className="tl-name">{t.name}</div>
+                    <div className="tl-role">{t.role}</div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand logo in slide footer */}
+            <img className="slide-indicator" src="/iacademy-logo.png" alt="iAcademy" />
           </section>
 
           {/* SLIDE 4 — CIERRE */}
-          <section className={slideClass(3)} id="s4" aria-label="Empezamos">
+          <section className={slideClass(4)} id="s4" aria-label="Empezamos">
             <h2 className="close-headline">Empezamos</h2>
             <p className="close-sub">Vamos a diseñar y desplegar juntos</p>
             <hr className="accent-line close-rule" />
@@ -338,7 +408,8 @@ export default function Deck() {
             <div className="close-credit">
               Andrés Rodríguez · andresrodriguez.tech
             </div>
-            <div className="slide-indicator">04 / 04</div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand logo in slide footer */}
+            <img className="slide-indicator" src="/iacademy-logo.png" alt="iAcademy" />
           </section>
         </div>
       </div>

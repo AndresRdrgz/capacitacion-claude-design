@@ -1,0 +1,400 @@
+:root{
+  /* Monochrome tokens — warm-neutral grayscale, hierarchy by lightness */
+  --bg:#0B0B0C;
+  --surface:#161617;
+  --surface-raised:#212123;
+  --text-body:#B8B5AE;
+  --text-headline:#F6F3ED;
+  --text-muted:#78756D;
+  --accent:#DAD5CA;
+  --accent-warm:#A9A498;
+  --border:rgba(246,243,237,0.12);
+  --selection:rgba(218,213,202,0.30);
+
+  /* type families: next/font sets --ff-* on <html> (see app/layout.tsx); compose
+     them here with a generic fallback so the deck's --font-* tokens always end in
+     a keyword (sans-serif/serif/monospace), matching the original CSS. */
+  --font-display:var(--ff-display), sans-serif;
+  --font-sans:var(--ff-sans), sans-serif;
+  --font-serif:var(--ff-serif), serif;
+  --font-mono:var(--ff-mono), monospace;
+
+  --canvas-w:1920px;
+  --canvas-h:1080px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+::selection{background:var(--selection);}
+
+html, body{
+  height:100%;
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  overflow:hidden;
+  font-family:var(--font-sans);
+  overscroll-behavior:none;
+  -webkit-text-size-adjust:100%;
+}
+
+/* viewport centers the scaled canvas */
+#stage{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+}
+
+#canvas{
+  width:var(--canvas-w);
+  height:var(--canvas-h);
+  flex:none; /* keep the 1920x1080 box; #stage is a flex container that would
+                otherwise shrink it below 1920 and clip the slides on the right.
+                scale() assumes a fixed 1920px canvas. */
+  position:relative;
+  transform-origin:center center;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  width:var(--canvas-w);
+  height:var(--canvas-h);
+  padding:120px;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.slide.active{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+/* Enable the crossfade only after the localStorage restore has applied, so a
+   returning visitor jumps straight to their stored slide with no fade-from-0. */
+#canvas.ready .slide{
+  transition:opacity .5s ease;
+}
+
+/* shared chrome */
+.wordmark{
+  font-family:var(--font-mono);
+  text-transform:uppercase;
+  letter-spacing:0.22em;
+  color:var(--text-muted);
+  font-size:14px;
+}
+.slide-indicator{
+  position:absolute;
+  bottom:120px;
+  right:120px;
+  font-family:var(--font-mono);
+  font-size:14px;
+  color:var(--text-muted);
+  letter-spacing:0.1em;
+}
+.accent-line{
+  height:1px;
+  background:var(--accent);
+  border:0;
+}
+
+/* ---------- SLIDE 1 — COVER ---------- */
+#s1 .cover-logo{
+  position:absolute;
+  top:120px;
+  left:50%;
+  transform:translateX(-50%);
+  height:52px;
+  width:auto;
+  filter:brightness(0) invert(1); /* black artwork → white */
+}
+#s1 .cover-body{
+  position:absolute;
+  top:50%;
+  left:120px;
+  right:120px;
+  transform:translateY(-50%);
+  z-index:2;
+}
+#s1 .cover-title{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:180px;
+  color:var(--text-headline);
+  letter-spacing:-0.03em;
+  line-height:0.95;
+  overflow-wrap:break-word;
+  word-break:normal;
+  max-width:1700px;
+}
+#s1 .cover-sub{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:52px;
+  color:var(--accent);
+  margin-top:28px;
+}
+/* "Claude" rendered as its wordmark logo, inline in the subtitle. A CSS mask
+   recolors the SVG to currentColor (the subtitle's accent), so it matches the
+   surrounding text and the monochrome palette. */
+#s1 .cover-sub .claude-logo{
+  display:inline-block;
+  height:0.82em;
+  width:calc(0.82em * 184 / 40);
+  vertical-align:-0.12em;
+  background-color:currentColor;
+  -webkit-mask:url(/claude-logo.svg) center / contain no-repeat;
+  mask:url(/claude-logo.svg) center / contain no-repeat;
+}
+#s1 .cover-rule{
+  width:120px;
+  margin-top:40px;
+}
+#s1 .cover-credit{
+  position:absolute;
+  bottom:120px;
+  left:120px;
+}
+#s1 .cover-credit .name{
+  font-family:var(--font-sans);
+  font-size:20px;
+  color:var(--text-body);
+  font-weight:500;
+}
+#s1 .cover-credit .date{
+  font-family:var(--font-mono);
+  font-size:16px;
+  color:var(--text-muted);
+  margin-top:8px;
+}
+#s1 .ghost-number{
+  position:absolute;
+  bottom:40px;
+  right:80px;
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:480px;
+  line-height:0.8;
+  color:var(--text-headline);
+  opacity:0.06;
+  z-index:1;
+  user-select:none;
+}
+
+/* ---------- generic slide header ---------- */
+.slide-header{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:64px;
+  color:var(--text-headline);
+  letter-spacing:-0.02em;
+  line-height:1;
+}
+.slide-subheader{
+  font-family:var(--font-serif);
+  font-style:italic;
+  color:var(--accent);
+  margin-top:18px;
+}
+
+/* ---------- SLIDE 2 — QUÉ ESPERAR ---------- */
+#s2 .slide-subheader{font-size:28px;}
+#s2 .outcomes{
+  margin-top:90px;
+  display:flex;
+  flex-direction:column;
+  gap:56px;
+  max-width:1500px;
+}
+#s2 .outcome{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  align-items:baseline;
+  column-gap:48px;
+  padding-bottom:56px;
+  border-bottom:1px solid var(--border);
+}
+#s2 .outcome:last-child{border-bottom:0;padding-bottom:0;}
+#s2 .outcome .num{
+  font-family:var(--font-mono);
+  font-size:20px;
+  color:var(--text-muted);
+  letter-spacing:0.1em;
+}
+#s2 .outcome .o-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:32px;
+  color:var(--text-headline);
+  letter-spacing:-0.01em;
+}
+#s2 .outcome .o-desc{
+  font-family:var(--font-sans);
+  font-size:20px;
+  color:var(--text-body);
+  margin-top:12px;
+  line-height:1.5;
+}
+
+/* ---------- SLIDE 3 — AGENDA ---------- */
+#s3 .slide-subheader{font-size:28px;}
+#s3 .agenda-grid{
+  margin-top:90px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap:80px;
+  row-gap:56px;
+  max-width:1660px;
+}
+.agenda-grid > .agenda-item{
+  min-width:0;
+}
+#s3 .agenda-item{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  align-items:start;
+  column-gap:36px;
+  min-width:0;
+}
+.agenda-item > div{
+  min-width:0;
+}
+#s3 .agenda-item .a-num{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:44px;
+  color:var(--accent);
+  line-height:1;
+}
+#s3 .agenda-item .a-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:28px;
+  color:var(--text-headline);
+  line-height:1.2;
+  letter-spacing:-0.01em;
+  overflow-wrap:break-word;
+  word-break:normal;
+  hyphens:auto;
+}
+#s3 .agenda-item .a-sub{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:18px;
+  color:var(--accent-warm);
+  margin-top:10px;
+  line-height:1.4;
+}
+
+/* ---------- SLIDE 4 — CIERRE ---------- */
+#s4{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+#s4 .close-headline{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:108px;
+  color:var(--text-headline);
+  letter-spacing:-0.03em;
+  line-height:1;
+  max-width:900px;
+  overflow-wrap:break-word;
+}
+#s4 .close-sub{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:36px;
+  color:var(--accent);
+  margin-top:24px;
+}
+#s4 .close-rule{
+  width:80px;
+  margin-top:48px;
+}
+#s4 .prereqs{
+  margin:80px auto 0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap:100px;
+  text-align:left;
+  max-width:1400px;
+  width:100%;
+}
+.prereq-col{
+  min-width:0;
+}
+#s4 .prereq-col h3{
+  font-family:var(--font-mono);
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  font-size:15px;
+  color:var(--text-muted);
+  font-weight:500;
+  margin-bottom:28px;
+}
+#s4 .prereq-col ul{list-style:none; min-width:0; max-width:100%;}
+#s4 .prereq-col li{
+  font-family:var(--font-sans);
+  font-size:19px;
+  color:var(--text-body);
+  line-height:1.4;
+  padding:12px 0;
+  position:relative;
+  padding-left:28px;
+  overflow-wrap:break-word;
+  word-break:normal;
+  max-width:100%;
+}
+#s4 .prereq-col li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:21px;
+  width:8px;
+  height:8px;
+  background:var(--accent);
+  border-radius:50%;
+}
+#s4 .close-credit{
+  position:absolute;
+  bottom:120px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-family:var(--font-mono);
+  font-size:16px;
+  color:var(--text-muted);
+  letter-spacing:0.08em;
+}
+
+/* ---------- progress dots ---------- */
+#dots{
+  position:fixed;
+  bottom:24px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  z-index:50;
+}
+#dots .dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--border);
+  transition:background .3s, transform .3s;
+}
+#dots .dot.active{
+  background:var(--accent);
+  transform:scale(1.25);
+}

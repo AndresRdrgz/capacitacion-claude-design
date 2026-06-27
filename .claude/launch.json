@@ -4,7 +4,7 @@
     {
       "name": "deck",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", ".", "-l", "3210"],
+      "runtimeArgs": ["next", "dev", "-p", "3210"],
       "port": 3210
     }
   ]

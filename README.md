@@ -1,6 +1,6 @@
 # Claude Design · Del diseño a producción
 
-Deck de capacitación interactivo (4 slides) sobre Claude Design, el sistema de diseño Direction C, y el flujo de diseño → código → deploy con Vercel.
+Deck de capacitación interactivo (4 slides) sobre Claude Design y el flujo de diseño → código → deploy con Vercel. Construido con **Next.js (App Router)** y exportado como sitio estático.
 
 ## 🎯 Audiencia
 Personal de iAcademy · nivel básico-intermedio.
@@ -21,19 +21,28 @@ Personal de iAcademy · nivel básico-intermedio.
 - La posición se persiste en `localStorage`
 
 ## 🎨 Sistema de diseño
-Basado en **Direction C** — paleta navy `#050B1A` + vellum `#F4EFE6` + azure `#5EA0FF` + cream `#FFD9A8`. Tipografía: Bricolage Grotesque (display) · Geist (sans) · Instrument Serif (italic accents) · Geist Mono (metadata).
+Paleta **monocromática** (warm-neutral) — la jerarquía se construye solo con luminosidad sobre un fondo casi negro `#0B0B0C`, con texto vellum `#F6F3ED` y acento gris cálido `#DAD5CA`. Tipografía servida con `next/font` (self-hosted): Bricolage Grotesque (display) · Geist (sans) · Instrument Serif (italic accents) · Geist Mono (metadata).
 
-## 🚀 Deploy
-Configurado para deploy estático en Vercel — sin build step.
+## 🛠️ Desarrollo local
+Requiere Node.js `>=20.9.0`.
 
 ```bash
-# local
-npx serve .
-# o simplemente abre index.html en cualquier navegador
+npm install
+npm run dev      # http://localhost:3210
 ```
 
-## 📦 Archivos
-- `index.html` — deck autocontenido (HTML + CSS + JS embebidos, Google Fonts vía CDN)
+## 🚀 Build & deploy
+```bash
+npm run build    # genera el sitio estático en ./out
+npx serve out    # preview local del artefacto estático
+```
+Vercel detecta Next.js automáticamente y sirve la exportación estática — sin configuración extra.
+
+## 📦 Estructura
+- `app/layout.tsx` — root layout, fuentes vía `next/font`, metadata
+- `app/page.tsx` — server component que renderiza el deck
+- `app/globals.css` — tokens de diseño + estilos del deck
+- `components/Deck.tsx` — client component: markup de las 4 slides + navegación
 
 ---
 

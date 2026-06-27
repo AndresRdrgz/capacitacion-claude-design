@@ -1,18 +1,38 @@
 {
   "name": "capacitacion-claude-design",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Capacitación 'Claude Design. Del diseño a producción' — deck interactivo de 4 slides",
+  "description": "Capacitación 'Claude Design. Del diseño a producción' — deck interactivo de 4 slides (Next.js App Router)",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
-    "dev": "npx serve .",
-    "start": "npx serve ."
+    "dev": "next dev -p 3210",
+    "build": "next build",
+    "start": "npx serve out -l 3210",
+    "lint": "eslint ."
   },
   "keywords": [
     "claude-design",
     "capacitacion",
     "design-system",
-    "vercel"
+    "vercel",
+    "nextjs"
   ],
   "author": "Andrés Rodríguez",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.9",
+    "typescript": "^6.0.3"
+  }
 }

@@ -192,7 +192,8 @@ export default function Deck() {
               <h1 className="cover-title">Bootcamp</h1>
               <p className="cover-sub">
                 Del diseño a producción con{" "}
-                <span className="claude-logo" role="img" aria-label="Claude" />
+                {/* eslint-disable-next-line @next/next/no-img-element -- inline brand logo */}
+                <img className="claude-logo" src="/claude-logo.svg" alt="Claude" />
               </p>
               <hr className="accent-line cover-rule" />
             </div>

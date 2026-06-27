@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Design · Del diseño a producción</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Direction C tokens */
+    --bg:#050B1A;
+    --surface:#0B1424;
+    --surface-raised:#14213E;
+    --text-body:#C8D0DE;
+    --text-headline:#F4EFE6;
+    --text-muted:#6E84AC;
+    --accent:#5EA0FF;
+    --accent-warm:#FFD9A8;
+    --border:rgba(200,208,222,0.12);
+    --selection:rgba(94,160,255,0.35);
+
+    /* type families */
+    --font-display:"Bricolage Grotesque", sans-serif;
+    --font-sans:"Geist", sans-serif;
+    --font-serif:"Instrument Serif", serif;
+    --font-mono:"Geist Mono", monospace;
+
+    --canvas-w:1920px;
+    --canvas-h:1080px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  ::selection{background:var(--selection);}
+
+  html,body{
+    height:100%;
+    background:var(--bg);
+    overflow:hidden;
+    font-family:var(--font-sans);
+  }
+
+  /* viewport centers the scaled canvas */
+  #stage{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg);
+  }
+
+  #canvas{
+    width:var(--canvas-w);
+    height:var(--canvas-h);
+    position:relative;
+    transform-origin:center center;
+    background:var(--bg);
+    overflow:hidden;
+  }
+
+  .slide{
+    position:absolute;
+    inset:0;
+    width:var(--canvas-w);
+    height:var(--canvas-h);
+    padding:120px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .5s ease;
+    pointer-events:none;
+  }
+  .slide.active{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  /* shared chrome */
+  .wordmark{
+    font-family:var(--font-mono);
+    text-transform:uppercase;
+    letter-spacing:0.22em;
+    color:var(--text-muted);
+    font-size:14px;
+  }
+  .slide-indicator{
+    position:absolute;
+    bottom:120px;
+    right:120px;
+    font-family:var(--font-mono);
+    font-size:14px;
+    color:var(--text-muted);
+    letter-spacing:0.1em;
+  }
+  .accent-line{
+    height:1px;
+    background:var(--accent);
+    border:0;
+  }
+
+  /* ---------- SLIDE 1 — COVER ---------- */
+  #s1 .corner-mark{position:absolute;top:120px;left:120px;}
+  #s1 .cover-body{
+    position:absolute;
+    top:50%;
+    left:120px;
+    transform:translateY(-50%);
+    z-index:2;
+  }
+  #s1 .cover-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:180px;
+    color:var(--text-headline);
+    letter-spacing:-0.03em;
+    line-height:0.95;
+  }
+  #s1 .cover-sub{
+    font-family:var(--font-serif);
+    font-style:italic;
+    font-size:52px;
+    color:var(--accent);
+    margin-top:28px;
+  }
+  #s1 .cover-rule{
+    width:120px;
+    margin-top:40px;
+  }
+  #s1 .cover-credit{
+    position:absolute;
+    bottom:120px;
+    left:120px;
+  }
+  #s1 .cover-credit .name{
+    font-family:var(--font-sans);
+    font-size:20px;
+    color:var(--text-body);
+    font-weight:500;
+  }
+  #s1 .cover-credit .date{
+    font-family:var(--font-mono);
+    font-size:16px;
+    color:var(--text-muted);
+    margin-top:8px;
+  }
+  #s1 .ghost-number{
+    position:absolute;
+    bottom:40px;
+    right:80px;
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:480px;
+    line-height:0.8;
+    color:var(--text-headline);
+    opacity:0.06;
+    z-index:1;
+    user-select:none;
+  }
+
+  /* ---------- generic slide header ---------- */
+  .slide-header{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:64px;
+    color:var(--text-headline);
+    letter-spacing:-0.02em;
+    line-height:1;
+  }
+  .slide-subheader{
+    font-family:var(--font-serif);
+    font-style:italic;
+    color:var(--accent);
+    margin-top:18px;
+  }
+
+  /* ---------- SLIDE 2 — QUÉ ESPERAR ---------- */
+  #s2 .slide-subheader{font-size:28px;}
+  #s2 .outcomes{
+    margin-top:90px;
+    display:flex;
+    flex-direction:column;
+    gap:56px;
+    max-width:1500px;
+  }
+  #s2 .outcome{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    align-items:baseline;
+    column-gap:48px;
+    padding-bottom:56px;
+    border-bottom:1px solid var(--border);
+  }
+  #s2 .outcome:last-child{border-bottom:0;padding-bottom:0;}
+  #s2 .outcome .num{
+    font-family:var(--font-mono);
+    font-size:20px;
+    color:var(--text-muted);
+    letter-spacing:0.1em;
+  }
+  #s2 .outcome .o-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:32px;
+    color:var(--text-headline);
+    letter-spacing:-0.01em;
+  }
+  #s2 .outcome .o-desc{
+    font-family:var(--font-sans);
+    font-size:20px;
+    color:var(--text-body);
+    margin-top:12px;
+    line-height:1.5;
+  }
+
+  /* ---------- SLIDE 3 — AGENDA ---------- */
+  #s3 .slide-subheader{font-size:28px;}
+  #s3 .agenda-grid{
+    margin-top:90px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:80px;
+    row-gap:56px;
+    max-width:1660px;
+  }
+  .agenda-grid > .agenda-item{
+    min-width:0;
+  }
+  #s3 .agenda-item{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    align-items:start;
+    column-gap:36px;
+    min-width:0;
+  }
+  .agenda-item > div{
+    min-width:0;
+  }
+  #s3 .agenda-item .a-num{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:44px;
+    color:var(--accent);
+    line-height:1;
+  }
+  #s3 .agenda-item .a-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:28px;
+    color:var(--text-headline);
+    line-height:1.2;
+    letter-spacing:-0.01em;
+    overflow-wrap:break-word;
+    word-break:normal;
+    hyphens:auto;
+  }
+  #s3 .agenda-item .a-sub{
+    font-family:var(--font-serif);
+    font-style:italic;
+    font-size:18px;
+    color:var(--accent-warm);
+    margin-top:10px;
+    line-height:1.4;
+  }
+
+  /* ---------- SLIDE 4 — CIERRE ---------- */
+  #s4{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  #s4 .close-headline{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:108px;
+    color:var(--text-headline);
+    letter-spacing:-0.03em;
+    line-height:1;
+    max-width:900px;
+    overflow-wrap:break-word;
+  }
+  #s4 .close-sub{
+    font-family:var(--font-serif);
+    font-style:italic;
+    font-size:36px;
+    color:var(--accent);
+    margin-top:24px;
+  }
+  #s4 .close-rule{
+    width:80px;
+    margin-top:48px;
+  }
+  #s4 .prereqs{
+    margin:80px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:100px;
+    text-align:left;
+    max-width:1400px;
+    width:100%;
+  }
+  .prereq-col{
+    min-width:0;
+  }
+  #s4 .prereq-col h4{
+    font-family:var(--font-mono);
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    font-size:15px;
+    color:var(--text-muted);
+    font-weight:500;
+    margin-bottom:28px;
+  }
+  #s4 .prereq-col ul{list-style:none; min-width:0; max-width:100%;}
+  #s4 .prereq-col li{
+    font-family:var(--font-sans);
+    font-size:19px;
+    color:var(--text-body);
+    line-height:1.4;
+    padding:12px 0;
+    position:relative;
+    padding-left:28px;
+    overflow-wrap:break-word;
+    word-break:normal;
+    max-width:100%;
+  }
+  #s4 .prereq-col li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:21px;
+    width:8px;
+    height:8px;
+    background:var(--accent);
+    border-radius:50%;
+  }
+  #s4 .close-credit{
+    position:absolute;
+    bottom:120px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:16px;
+    color:var(--text-muted);
+    letter-spacing:0.08em;
+  }
+
+  /* ---------- progress dots ---------- */
+  #dots{
+    position:fixed;
+    bottom:24px;
+    left:0;
+    right:0;
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    z-index:50;
+  }
+  #dots .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--border);
+    transition:background .3s, transform .3s;
+  }
+  #dots .dot.active{
+    background:var(--accent);
+    transform:scale(1.25);
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="canvas">
+
+    <!-- SLIDE 1 -->
+    <section class="slide" id="s1">
+      <div class="corner-mark wordmark">iAcademy</div>
+      <div class="cover-body">
+        <h1 class="cover-title">Claude Design</h1>
+        <p class="cover-sub">Del diseño a producción</p>
+        <hr class="accent-line cover-rule">
+      </div>
+      <div class="cover-credit">
+        <div class="name">Andrés Rodríguez · Capacitador</div>
+        <div class="date">Junio 2026</div>
+      </div>
+      <div class="ghost-number">01</div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide" id="s2">
+      <header>
+        <h2 class="slide-header">Qué esperar</h2>
+        <p class="slide-subheader">El resultado de esta sesión</p>
+      </header>
+      <div class="outcomes">
+        <div class="outcome">
+          <div class="num">01</div>
+          <div>
+            <div class="o-title">Diseñar una aplicación real</div>
+            <div class="o-desc">Usar Claude Design para producir un artefacto visual.</div>
+          </div>
+        </div>
+        <div class="outcome">
+          <div class="num">02</div>
+          <div>
+            <div class="o-title">Entender el sistema de diseño</div>
+            <div class="o-desc">Colores, tipografía, tokens: cómo se vuelve código.</div>
+          </div>
+        </div>
+        <div class="outcome">
+          <div class="num">03</div>
+          <div>
+            <div class="o-title">Del diseño a producción</div>
+            <div class="o-desc">Convertir el artefacto en código desplegable.</div>
+          </div>
+        </div>
+        <div class="outcome">
+          <div class="num">04</div>
+          <div>
+            <div class="o-title">Vercel como destino</div>
+            <div class="o-desc">Preview, deploy, dominio: el ciclo completo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-indicator">02 / 04</div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide" id="s3">
+      <header>
+        <h2 class="slide-header">Lo que veremos</h2>
+        <p class="slide-subheader">Seis bloques, un flujo</p>
+      </header>
+      <div class="agenda-grid">
+        <div class="agenda-item">
+          <div class="a-num">1</div>
+          <div>
+            <div class="a-title">Qué es Claude Design y por qué importa</div>
+            <div class="a-sub">El punto de partida</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="a-num">2</div>
+          <div>
+            <div class="a-title">El flujo de trabajo: brief → variantes → artefacto</div>
+            <div class="a-sub">De la idea a algo tangible</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="a-num">3</div>
+          <div>
+            <div class="a-title">Sistema de diseño y tokens: la gramática del código</div>
+            <div class="a-sub">Diseño que se traduce solo</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="a-num">4</div>
+          <div>
+            <div class="a-title">Del artefacto al código (handoff)</div>
+            <div class="a-sub">El puente a producción</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="a-num">5</div>
+          <div>
+            <div class="a-title">Vercel: preview, deploy, dominio</div>
+            <div class="a-sub">Publicar de verdad</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="a-num">6</div>
+          <div>
+            <div class="a-title">Claude Code: el copiloto de programación</div>
+            <div class="a-sub">Iterar con ayuda</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-indicator">03 / 04</div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide" id="s4">
+      <h2 class="close-headline">Empezamos</h2>
+      <p class="close-sub">Vamos a diseñar y desplegar juntos</p>
+      <hr class="accent-line close-rule">
+      <div class="prereqs">
+        <div class="prereq-col">
+          <h4>Necesitas</h4>
+          <ul>
+            <li>Cuenta en claude.ai (plan Pro)</li>
+            <li>Navegador moderno</li>
+            <li>Ganas de iterar</li>
+          </ul>
+        </div>
+        <div class="prereq-col">
+          <h4>Opcional pero útil</h4>
+          <ul>
+            <li>Node.js 18+ instalado</li>
+            <li>Claude Code CLI instalado</li>
+            <li>Cuenta en Vercel (plan Hobby)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="close-credit">Andrés Rodríguez · andresrodriguez.tech</div>
+      <div class="slide-indicator">04 / 04</div>
+    </section>
+
+  </div>
+</div>
+
+<div id="dots"></div>
+
+<script>
+(function(){
+  "use strict";
+  var TOTAL = 4;
+  var STORAGE_KEY = "claude-design-deck-slide";
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var canvas = document.getElementById("canvas");
+  var dotsWrap = document.getElementById("dots");
+
+  // build dots
+  for (var i = 0; i < TOTAL; i++){
+    var d = document.createElement("div");
+    d.className = "dot";
+    d.dataset.index = i;
+    dotsWrap.appendChild(d);
+  }
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  var current = 0;
+  var stored = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+  if (!isNaN(stored) && stored >= 0 && stored < TOTAL){ current = stored; }
+
+  function render(){
+    slides.forEach(function(s, idx){
+      s.classList.toggle("active", idx === current);
+    });
+    dots.forEach(function(d, idx){
+      d.classList.toggle("active", idx === current);
+    });
+    localStorage.setItem(STORAGE_KEY, String(current));
+  }
+
+  function go(n){
+    current = Math.max(0, Math.min(TOTAL - 1, n));
+    render();
+  }
+  function next(){ if (current < TOTAL - 1) go(current + 1); }
+  function prev(){ if (current > 0) go(current - 1); }
+
+  // scaling: fit 1920x1080 canvas into viewport
+  function scale(){
+    var sw = window.innerWidth / 1920;
+    var sh = window.innerHeight / 1080;
+    var s = Math.min(sw, sh);
+    canvas.style.transform = "scale(" + s + ")";
+  }
+  window.addEventListener("resize", scale);
+
+  // keyboard
+  document.addEventListener("keydown", function(e){
+    switch(e.key){
+      case "ArrowRight":
+      case "ArrowDown":
+      case "PageDown":
+      case " ":
+        e.preventDefault(); next(); break;
+      case "ArrowLeft":
+      case "ArrowUp":
+      case "PageUp":
+        e.preventDefault(); prev(); break;
+      case "Home":
+        e.preventDefault(); go(0); break;
+      case "End":
+        e.preventDefault(); go(TOTAL - 1); break;
+      case "0":
+        go(0); break;
+      case "f":
+      case "F":
+        toggleFullscreen(); break;
+    }
+  });
+
+  // click halves
+  document.getElementById("stage").addEventListener("click", function(e){
+    var mid = window.innerWidth / 2;
+    if (e.clientX < mid){ prev(); } else { next(); }
+  });
+
+  // dot click
+  dots.forEach(function(d){
+    d.addEventListener("click", function(e){
+      e.stopPropagation();
+      go(parseInt(d.dataset.index, 10));
+    });
+  });
+
+  function toggleFullscreen(){
+    if (!document.fullscreenElement){
+      (document.documentElement.requestFullscreen || function(){}).call(document.documentElement);
+    } else {
+      (document.exitFullscreen || function(){}).call(document);
+    }
+  }
+
+  scale();
+  render();
+})();
+</script>
+</body>
+</html>

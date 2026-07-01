@@ -28,6 +28,7 @@ Lanzar el "Curso de Claude Code" como contenido pregrabado y self-paced dentro d
 |---|---|
 | [`.plan/VISION.md`](.plan/VISION.md) | La propuesta, los usuarios, las métricas, lo que NO se hace |
 | [`.plan/ARCHITECTURE.md`](.plan/ARCHITECTURE.md) | Stack real, schema, flow de acceso, endpoints |
+| [`.plan/DESIGN-BRIEF.md`](.plan/DESIGN-BRIEF.md) | **Brief de diseño de interfaces para Claude Design** (módulos, pantallas, sistema visual, estados) |
 | [`.plan/SPRINT-BACKLOG.md`](.plan/SPRINT-BACKLOG.md) | Los 4 sprints con criterios de "done" |
 | [`.plan/sprints/sprint-1-schema.md`](.plan/sprints/sprint-1-schema.md) | Sprint 1: extender schema de iAcademy |
 | [`.plan/sprints/sprint-2-seed.md`](.plan/sprints/sprint-2-seed.md) | Sprint 2: cargar el curso en la DB |

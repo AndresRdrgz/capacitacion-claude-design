@@ -4,6 +4,9 @@ import { ChevronLeftIcon } from "@/components/elearn/icons";
 
 // Rutas canónicas de la plataforma (brief §0.1)
 export const ROUTES = {
+  home: "/", // Landing pública
+  login: "/login", // Acceso (credenciales demo)
+  deck: "/deck", // Capacitación (deck interactivo)
   dashboard: "/dashboard",
   ruta: "/rutas/claude-desde-cero",
   curso: "/curso/curso-de-claude-code",

@@ -189,3 +189,56 @@ export function ListIcon(p: IconProps) {
     </Svg>
   );
 }
+
+/** Mostrar contraseña */
+export function EyeIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </Svg>
+  );
+}
+
+/** Ocultar contraseña */
+export function EyeOffIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+      <path d="M6.61 6.61A13.53 13.53 0 0 0 2 12s3.5 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+      <line x1="2" y1="2" x2="22" y2="22" />
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+    </Svg>
+  );
+}
+
+/** Error / alerta */
+export function TriangleAlertIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12" y2="17.01" />
+    </Svg>
+  );
+}
+
+/** Certificado / logro */
+export function AwardIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+    </Svg>
+  );
+}
+
+/** Terminal / código (marca tech) */
+export function TerminalIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <polyline points="4 17 10 11 4 5" />
+      <line x1="12" y1="19" x2="20" y2="19" />
+    </Svg>
+  );
+}

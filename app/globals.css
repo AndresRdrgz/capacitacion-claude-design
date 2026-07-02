@@ -31,10 +31,15 @@ html, body{
   margin:0;
   padding:0;
   background:var(--bg);
-  overflow:hidden;
   font-family:var(--font-sans);
-  overscroll-behavior:none;
   -webkit-text-size-adjust:100%;
+}
+
+/* the deck is a fixed 1920x1080 stage; lock scrolling only while it is mounted
+   so the e-learning screens (app/(elearn)) keep normal document scroll */
+html:has(#stage), body:has(#stage){
+  overflow:hidden;
+  overscroll-behavior:none;
 }
 
 /* viewport centers the scaled canvas */

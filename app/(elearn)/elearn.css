@@ -1,0 +1,157 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Plataforma e-learning "Claude desde cero" — tokens del handoff de
+   Claude Design (design system "Monochrome Black" de Andrés Rodríguez +
+   acentos de pantalla: Claude, link, success, error).
+   Todo va scoped bajo .elearn para no chocar con los tokens del deck
+   definidos en app/globals.css (:root).
+   ────────────────────────────────────────────────────────────────────── */
+
+.elearn{
+  /* — Base brand ramp · black → white — */
+  --ar-ink:#000000;
+  --ar-midnight:#0C0C0C;
+  --ar-slate:#161616;
+  --ar-steel:#2C2C2C;
+  --ar-mist:#8A8A8A;
+  --ar-bone:#C4C4C4;
+  --ar-vellum:#EDEDEB;
+  --ar-azure:#FFFFFF;
+  --ar-cream:#CFCFCF;
+  --ar-rule:rgba(255,255,255,0.12);
+
+  /* — Semantic aliases (dark) — */
+  --surface-base:var(--ar-ink);
+  --surface-default:var(--ar-midnight);
+  --surface-raised:var(--ar-slate);
+  --border-default:var(--ar-rule);
+  --border-strong:var(--ar-steel);
+  --text-headline:var(--ar-vellum);
+  --text-body:var(--ar-bone);
+  --text-muted:var(--ar-mist);
+  --text-accent:var(--ar-azure);
+  --text-warm:var(--ar-cream);
+  --accent:var(--ar-azure);
+  --accent-contrast:var(--ar-ink);
+  --control-bg:var(--ar-vellum);
+  --control-fg:var(--ar-ink);
+  --focus-ring:rgba(255,255,255,0.30);
+
+  /* — Acentos de pantalla (helmet de los .dc.html) — */
+  --claude:#D97757;
+  --claude-hover:#C4623F;
+  --claude-ink:#1A0D06;
+  --link:#4169E1;
+  --success:#3FB68B;
+  --success-subtle:rgba(63,182,139,0.14);
+  --error:#E5658A;
+  --error-subtle:rgba(229,101,138,0.14);
+
+  /* — Familias (next/font define --ff-* en <html>, ver app/layout.tsx) — */
+  --font-display:var(--ff-display), sans-serif;
+  --font-sans:var(--ff-sans), sans-serif;
+  --font-serif:var(--ff-serif), serif;
+  --font-mono:var(--ff-mono), monospace;
+
+  /* — Sombras (sistema oscuro: suave + highlight interior) — */
+  --shadow-soft:0 1px 0 rgba(255,255,255,0.05) inset, 0 12px 32px -12px rgba(0,0,0,0.70);
+  --shadow-lift:0 24px 60px -24px rgba(0,0,0,0.85), 0 2px 0 rgba(255,255,255,0.05) inset;
+
+  min-height:100vh;
+  background:var(--surface-base);
+  color:var(--ar-bone);
+  font-family:var(--font-sans);
+  color-scheme:dark;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.elearn ::selection{background:rgba(255,255,255,0.85);color:var(--ar-ink);}
+
+/* ── Micro-patrones compartidos ─────────────────────────────────────── */
+
+/* Eyebrow: label mono en mayúsculas, con regla de 28px opcional (.rule) */
+.el-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  white-space:nowrap;
+}
+.el-eyebrow.rule::before{
+  content:"";
+  width:28px;
+  height:1px;
+  background:var(--accent);
+  flex-shrink:0;
+}
+
+/* Pills / botones */
+.el-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-family:var(--font-sans);
+  font-size:14px;
+  border-radius:999px;
+  padding:14px 26px;
+  text-decoration:none;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:background 160ms ease-out, border-color 160ms ease-out, opacity 160ms ease-out;
+}
+.el-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.el-btn-claude{
+  font-weight:600;
+  color:var(--claude-ink);
+  background:var(--claude);
+  border:none;
+}
+.el-btn-claude:hover{background:var(--claude-hover);}
+.el-btn-outline{
+  font-weight:500;
+  color:var(--text-headline);
+  background:transparent;
+  border:1px solid var(--border-strong);
+}
+.el-btn-outline:hover{background:var(--surface-raised);}
+.el-btn-sm{padding:10px 20px;font-size:13px;}
+.el-btn[disabled], .el-btn.is-disabled{opacity:0.45;cursor:not-allowed;}
+.el-btn-claude[disabled]:hover{background:var(--claude);}
+
+/* Barra de progreso */
+.el-progress{
+  height:6px;
+  width:100%;
+  background:var(--border-default);
+  border-radius:999px;
+  overflow:hidden;
+}
+.el-progress > i{
+  display:block;
+  height:100%;
+  background:var(--accent);
+  border-radius:999px;
+  transition:width 400ms ease-out;
+}
+
+/* Links de navegación del topbar */
+.el-navlink{font-size:14px;font-weight:500;text-decoration:none;transition:color 160ms ease-out;}
+.el-navlink.active{color:var(--text-headline);}
+.el-navlink:not(.active){color:var(--text-muted);}
+.el-navlink:not(.active):hover{color:var(--text-body);}
+
+/* Spinner del quiz (envío simulado) */
+@keyframes el-spin{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion: reduce){
+  .elearn *, .elearn *::before, .elearn *::after{
+    animation-duration:0.01ms !important;
+    transition-duration:0.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
